@@ -174,30 +174,24 @@ bool fatInit (uint32_t cacheSize, bool setAsDefaultDevice) {
 		char filePath[PATH_MAX];
 		strcpy (filePath, _FAT_disc_interfaces[defaultDevice].name);
 		strcat (filePath, ":/");
+		chdir (filePath);
 #ifdef ARGV_MAGIC
-		if ( __system_argv->argvMagic == ARGV_MAGIC && __system_argv->argc >= 1 && strrchr( __system_argv->argv[0], '/' )!=NULL ) {
+		if (__system_argv->argc) {
 			// Check the app's path against each of our mounted devices, to see
 			// if we can support it. If so, change to that path.
-			for (i = 0;
-				_FAT_disc_interfaces[i].name != NULL && _FAT_disc_interfaces[i].getInterface != NULL;
-				i++)
-			{
-				if ( !strncasecmp( __system_argv->argv[0], _FAT_disc_interfaces[i].name,
-					strlen(_FAT_disc_interfaces[i].name)))
-				{
-					char *lastSlash;
-					strcpy(filePath, __system_argv->argv[0]);
-					lastSlash = strrchr( filePath, '/' );
+			const char *path = *__system_argv->argv;
+			const char *pathEnd;
 
-					if ( NULL != lastSlash) {
-						if ( *(lastSlash - 1) == ':') lastSlash++;
-						*lastSlash = 0;
-					}
-				}
+			pathEnd = strrchr (path, DIR_SEPARATOR);
+			if (pathEnd != NULL) {
+				pathEnd += 1;
+
+				strncpy (filePath, path, pathEnd - path);
+				filePath[pathEnd - path] = '\0';
+				chdir (filePath);
 			}
 		}
 #endif
-		chdir (filePath);
 	}
 
 	return true;
