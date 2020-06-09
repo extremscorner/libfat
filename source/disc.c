@@ -70,6 +70,7 @@ const INTERFACE_ID _FAT_disc_interfaces[] = {
 /* ==================== Gamecube ==================== */
 #elif defined (__gamecube__)
 #include <sdcard/gcsd.h>
+#include <ogc/dvd.h>
 
 static const DISC_INTERFACE* get_io_gcsd2 (void) {
 	return &__io_gcsd2;
@@ -83,10 +84,15 @@ static const DISC_INTERFACE* get_io_gcsda (void) {
 	return &__io_gcsda;
 }
 
+static const DISC_INTERFACE* get_io_gcode (void) {
+	return &__io_gcode;
+}
+
 const INTERFACE_ID _FAT_disc_interfaces[] = {
 	{"sd", get_io_gcsd2},
 	{"cardb", get_io_gcsdb},
 	{"carda", get_io_gcsda},
+	{"dvd", get_io_gcode},
 	{NULL, NULL}
 };	
 
