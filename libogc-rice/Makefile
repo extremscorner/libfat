@@ -1,17 +1,11 @@
 #---------------------------------------------------------------------------------
 .SUFFIXES:
 #---------------------------------------------------------------------------------
-ifeq ($(strip $(DEVKITPPC)),)
-$(error "Please set DEVKITPPC in your environment. export DEVKITPPC=<path to>devkitPPC)
+ifeq ($(strip $(DEVKITRICE)),)
+$(error "Please set DEVKITRICE in your environment. export DEVKITRICE=<path to>devkitRice)
 endif
 
-ifeq ($(PLATFORM),wii)
-include $(DEVKITPPC)/wii_rules
-endif
-
-ifeq ($(PLATFORM),cube)
-include $(DEVKITPPC)/gamecube_rules
-endif
+include	$(DEVKITRICE)/rules
 
 #---------------------------------------------------------------------------------
 # BUILD is the directory where object files & intermediate files will be placed
@@ -25,7 +19,7 @@ BUILD		?=	wii_release
 SOURCES		:=	../source
 INCLUDES	:=	../include
 DATA		:=
-LIBDIR		:=	$(TOPDIR)/libogc/lib
+LIBDIR		:=	$(TOPDIR)/libogc-rice/lib
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -80,11 +74,9 @@ export OFILES	:=	$(addsuffix .o,$(BINFILES)) \
 export INCLUDE	:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
 			$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
 			$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
-			-I$(CURDIR)/$(BUILD) \
-			-I$(LIBOGC_INC)
+			-I$(CURDIR)/$(BUILD)
 
-export LIBPATHS	:=	$(foreach dir,$(LIBDIRS),-L$(dir)/lib) \
-										-L$(LIBOGC_LIB)
+export LIBPATHS	:=	$(foreach dir,$(LIBDIRS),-L$(dir)/lib)
 
 .PHONY: $(BUILD) clean
 
@@ -106,12 +98,12 @@ dist-bin:
 	@tar --exclude=.svn --exclude=*CVS* -cvjf $(TOPDIR)/distribute/$(VERSTRING)/libfat-ogc-$(VERSTRING).tar.bz2 include lib
 
 install:
-	@mkdir -p $(DESTDIR)$(DEVKITPRO)/libogc/lib/cube
-	@mkdir -p $(DESTDIR)$(DEVKITPRO)/libogc/lib/wii
-	@mkdir -p $(DESTDIR)$(DEVKITPRO)/libogc/include
-	@cp lib/wii/libfat.a $(DESTDIR)$(DEVKITPRO)/libogc/lib/wii
-	@cp lib/cube/libfat.a $(DESTDIR)$(DEVKITPRO)/libogc/lib/cube
-	@cp $(TOPDIR)/include/fat.h $(TOPDIR)/include/libfatversion.h $(DESTDIR)$(DEVKITPRO)/libogc/include
+	@mkdir -p $(DEVKITRICE)/usr/lib/cube
+	@mkdir -p $(DEVKITRICE)/usr/lib/wii
+	@mkdir -p $(DEVKITRICE)/usr/include
+	@cp lib/wii/libfat.a $(DEVKITRICE)/usr/lib/wii
+	@cp lib/cube/libfat.a $(DEVKITRICE)/usr/lib/cube
+	@cp $(TOPDIR)/include/fat.h $(TOPDIR)/include/libfatversion.h $(DEVKITRICE)/usr/include
 
 #---------------------------------------------------------------------------------
 else

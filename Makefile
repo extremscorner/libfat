@@ -28,9 +28,11 @@ gba-release: include/libfatversion.h
 
 cube-release: include/libfatversion.h
 	$(MAKE) -C libogc PLATFORM=cube BUILD=cube_release
+	$(MAKE) -C libogc-rice PLATFORM=cube BUILD=cube_release
 
 wii-release: include/libfatversion.h
 	$(MAKE) -C libogc PLATFORM=wii BUILD=wii_release
+	$(MAKE) -C libogc-rice PLATFORM=wii BUILD=wii_release
 
 debug: nds-debug gba-debug cube-debug wii-debug
 
@@ -42,12 +44,13 @@ nds-debug: include/libfatversion.h
 gba-debug: include/libfatversion.h
 	$(MAKE) -C gba BUILD=debug
 
-
 cube-debug: include/libfatversion.h
-	$(MAKE) -C libogc PLATFORM=cube BUILD=wii_debug
+	$(MAKE) -C libogc PLATFORM=cube BUILD=cube_debug
+	$(MAKE) -C libogc-rice PLATFORM=cube BUILD=cube_debug
 
 wii-debug: include/libfatversion.h
-	$(MAKE) -C libogc PLATFORM=wii BUILD=cube_debug
+	$(MAKE) -C libogc PLATFORM=wii BUILD=wii_debug
+	$(MAKE) -C libogc-rice PLATFORM=wii BUILD=wii_debug
 
 clean: nds-clean gba-clean ogc-clean
 
@@ -59,6 +62,7 @@ gba-clean:
 
 ogc-clean:
 	$(MAKE) -C libogc clean
+	$(MAKE) -C libogc-rice clean
 
 dist-bin: nds-dist-bin gba-dist-bin ogc-dist-bin
 
@@ -70,13 +74,15 @@ gba-dist-bin: include/libfatversion.h gba-release distribute/$(VERSTRING)
 
 ogc-dist-bin: include/libfatversion.h ogc-release distribute/$(VERSTRING)
 	$(MAKE) -C libogc dist-bin
+	$(MAKE) -C libogc-rice dist-bin
 
 dist-src: distribute/$(VERSTRING)
 	@tar --exclude=.svn --exclude=*CVS* -cvjf distribute/$(VERSTRING)/libfat-src-$(VERSTRING).tar.bz2 \
 	source include Makefile \
 	nds/Makefile \
 	gba/Makefile \
-	libogc/Makefile
+	libogc/Makefile \
+	libogc-rice/Makefile
 
 dist: dist-bin dist-src
 
@@ -105,3 +111,4 @@ gba-install: gba-release
 
 ogc-install: cube-release wii-release
 	$(MAKE) -C libogc install
+	$(MAKE) -C libogc-rice install
