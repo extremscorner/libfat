@@ -1,9 +1,9 @@
 gba/lib
 gba/release
 include/libfatversion.h
-libogc/cube_release
-libogc/lib
-libogc/wii_release
+libogc2/cube_release
+libogc2/lib
+libogc2/wii_release
 libogc-rice/cube_release
 libogc-rice/lib
 libogc-rice/wii_release
@@ -11,6 +11,6 @@ nds/lib
 nds/release
 distribute
 gba/include
-libogc/include
+libogc2/include
 libogc-rice/include
 nds/include

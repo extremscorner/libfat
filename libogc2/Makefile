@@ -6,11 +6,11 @@ $(error "Please set DEVKITPPC in your environment. export DEVKITPPC=<path to>dev
 endif
 
 ifeq ($(PLATFORM),wii)
-include $(DEVKITPPC)/wii_rules
+include $(DEVKITPRO)/libogc2/wii_rules
 endif
 
 ifeq ($(PLATFORM),cube)
-include $(DEVKITPPC)/gamecube_rules
+include $(DEVKITPRO)/libogc2/gamecube_rules
 endif
 
 #---------------------------------------------------------------------------------
@@ -25,7 +25,7 @@ BUILD		?=	wii_release
 SOURCES		:=	../source
 INCLUDES	:=	../include
 DATA		:=
-LIBDIR		:=	$(TOPDIR)/libogc/lib
+LIBDIR		:=	$(TOPDIR)/libogc2/lib
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -106,12 +106,12 @@ dist-bin:
 	@tar --exclude=.svn --exclude=*CVS* -cvjf $(TOPDIR)/distribute/$(VERSTRING)/libfat-ogc-$(VERSTRING).tar.bz2 include lib
 
 install:
-	@mkdir -p $(DESTDIR)$(DEVKITPRO)/libogc/lib/cube
-	@mkdir -p $(DESTDIR)$(DEVKITPRO)/libogc/lib/wii
-	@mkdir -p $(DESTDIR)$(DEVKITPRO)/libogc/include
-	@cp lib/wii/libfat.a $(DESTDIR)$(DEVKITPRO)/libogc/lib/wii
-	@cp lib/cube/libfat.a $(DESTDIR)$(DEVKITPRO)/libogc/lib/cube
-	@cp $(TOPDIR)/include/fat.h $(TOPDIR)/include/libfatversion.h $(DESTDIR)$(DEVKITPRO)/libogc/include
+	@mkdir -p $(DESTDIR)$(DEVKITPRO)/libogc2/lib/cube
+	@mkdir -p $(DESTDIR)$(DEVKITPRO)/libogc2/lib/wii
+	@mkdir -p $(DESTDIR)$(DEVKITPRO)/libogc2/include
+	@cp lib/wii/libfat.a $(DESTDIR)$(DEVKITPRO)/libogc2/lib/wii
+	@cp lib/cube/libfat.a $(DESTDIR)$(DEVKITPRO)/libogc2/lib/cube
+	@cp $(TOPDIR)/include/fat.h $(TOPDIR)/include/libfatversion.h $(DESTDIR)$(DEVKITPRO)/libogc2/include
 
 #---------------------------------------------------------------------------------
 else
