@@ -51,19 +51,19 @@ static const DISC_INTERFACE* get_io_usbstorage (void) {
 	return &__io_usbstorage;
 }
 
-static const DISC_INTERFACE* get_io_gcsdb (void) {
-	return &__io_gcsdb;
-}
-
 static const DISC_INTERFACE* get_io_gcsda (void) {
 	return &__io_gcsda;
+}
+
+static const DISC_INTERFACE* get_io_gcsdb (void) {
+	return &__io_gcsdb;
 }
 
 const INTERFACE_ID _FAT_disc_interfaces[] = {
 	{"sd", get_io_wiisd},
 	{"usb", get_io_usbstorage},
-	{"cardb", get_io_gcsdb},
 	{"carda", get_io_gcsda},
+	{"cardb", get_io_gcsdb},
 	{NULL, NULL}
 };	
 	
@@ -72,16 +72,16 @@ const INTERFACE_ID _FAT_disc_interfaces[] = {
 #include <sdcard/gcsd.h>
 #include <ogc/dvd.h>
 
-static const DISC_INTERFACE* get_io_gcsd2 (void) {
-	return &__io_gcsd2;
+static const DISC_INTERFACE* get_io_gcsda (void) {
+	return &__io_gcsda;
 }
 
 static const DISC_INTERFACE* get_io_gcsdb (void) {
 	return &__io_gcsdb;
 }
 
-static const DISC_INTERFACE* get_io_gcsda (void) {
-	return &__io_gcsda;
+static const DISC_INTERFACE* get_io_gcsd2 (void) {
+	return &__io_gcsd2;
 }
 
 static const DISC_INTERFACE* get_io_gcode (void) {
@@ -89,9 +89,9 @@ static const DISC_INTERFACE* get_io_gcode (void) {
 }
 
 const INTERFACE_ID _FAT_disc_interfaces[] = {
-	{"sd", get_io_gcsd2},
-	{"cardb", get_io_gcsdb},
 	{"carda", get_io_gcsda},
+	{"cardb", get_io_gcsdb},
+	{"sd", get_io_gcsd2},
 	{"dvd", get_io_gcode},
 	{NULL, NULL}
 };	
