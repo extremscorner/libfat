@@ -118,31 +118,65 @@ bool fatMountSimple (const char* name, const DISC_INTERFACE* interface) {
 	return fatMount (name, interface, 0, DEFAULT_CACHE_PAGES, DEFAULT_SECTORS_PAGE);
 }
 
-void fatUnmount (const char* name) {
+bool fatUnmount (const char* name) {
 	devoptab_t *devops;
 	PARTITION* partition;
 
 	if(!name)
-		return;
+		return false;
 
 	devops = (devoptab_t*)GetDeviceOpTab (name);
 	if (!devops) {
-		return;
+		return false;
 	}
 
 	// Perform a quick check to make sure we're dealing with a libfat controlled device
 	if (devops->open_r != dotab_fat.open_r) {
-		return;
+		return false;
 	}
 
 	if (RemoveDevice (name) == -1) {
-		return;
+		return false;
 	}
 
 	partition = (PARTITION*)devops->deviceData;
 	_FAT_partition_destructor (partition);
 	_FAT_mem_free (devops);
+	return true;
 }
+
+#if defined(__gamecube__) || defined (__wii__)
+
+static s32 _FAT_onreset (s32 final) {
+	int i;
+	const DISC_INTERFACE *disc;
+
+	if (final == FALSE) {
+		for (i = 0;
+			_FAT_disc_interfaces[i].name != NULL && _FAT_disc_interfaces[i].getInterface != NULL;
+			i++)
+		{
+			char devname[10];
+			strcpy (devname, _FAT_disc_interfaces[i].name);
+			strcat (devname, ":");
+			if (fatUnmount (devname)) {
+				disc = _FAT_disc_interfaces[i].getInterface();
+				if (!disc) {
+					continue;
+				}
+				_FAT_disc_shutdown (disc);
+			}
+		}
+	}
+
+	return TRUE;
+}
+
+static sys_resetinfo _FAT_resetinfo = {
+	{NULL, NULL}, _FAT_onreset, 0
+};
+
+#endif
 
 bool fatInit (uint32_t cacheSize, bool setAsDefaultDevice) {
 	int i;
@@ -175,6 +209,7 @@ bool fatInit (uint32_t cacheSize, bool setAsDefaultDevice) {
 		strcpy (filePath, _FAT_disc_interfaces[defaultDevice].name);
 		strcat (filePath, ":/");
 		chdir (filePath);
+
 #ifdef ARGV_MAGIC
 		if (__system_argv->argc) {
 			// Check the app's path against each of our mounted devices, to see
@@ -194,6 +229,9 @@ bool fatInit (uint32_t cacheSize, bool setAsDefaultDevice) {
 #endif
 	}
 
+#if defined(__gamecube__) || defined (__wii__)
+	SYS_RegisterResetFunc(&_FAT_resetinfo);
+#endif
 	return true;
 }
 
