@@ -1098,7 +1098,7 @@ void _FAT_directory_entryStat (PARTITION* partition, DIR_ENTRY* entry, struct st
 	// Fill in the stat struct
 	// Some of the values are faked for the sake of compatibility
 	st->st_dev = _FAT_disc_hostType(partition->disc);					// The device is the 32bit ioType value
-  	st->st_ino = _FAT_directory_entryGetCluster(partition, entry->entryData);		// The file serial number is the start cluster
+	st->st_ino = _FAT_directory_entryGetCluster(partition, entry->entryData);		// The file serial number is the start cluster
 	st->st_mode = (_FAT_directory_isDirectory(entry) ? S_IFDIR : S_IFREG) |
 		(S_IRUSR | S_IRGRP | S_IROTH) |
 		(_FAT_directory_isWritable (entry) ? (S_IWUSR | S_IWGRP | S_IWOTH) : 0);		// Mode bits based on dirEntry ATTRIB byte
@@ -1107,18 +1107,21 @@ void _FAT_directory_entryStat (PARTITION* partition, DIR_ENTRY* entry, struct st
 	st->st_gid = 2;									// Faked for FAT
 	st->st_rdev = st->st_dev;
 	st->st_size = u8array_to_u32 (entry->entryData, DIR_ENTRY_fileSize);		// File size
-	st->st_atime = _FAT_filetime_to_time_t (
+	st->st_atim.tv_nsec = 0;
+	st->st_atim.tv_sec = _FAT_filetime_to_time_t (
 		0,
 		u8array_to_u16 (entry->entryData, DIR_ENTRY_aDate)
 	);
-	st->st_mtime = _FAT_filetime_to_time_t (
+	st->st_mtim.tv_nsec = 0;
+	st->st_mtim.tv_sec = _FAT_filetime_to_time_t (
 		u8array_to_u16 (entry->entryData, DIR_ENTRY_mTime),
 		u8array_to_u16 (entry->entryData, DIR_ENTRY_mDate)
 	);
-	st->st_ctime = _FAT_filetime_to_time_t (
+	st->st_ctim.tv_nsec = (entry->entryData[DIR_ENTRY_cTime_ms] % 100) * 10000000;
+	st->st_ctim.tv_sec = (entry->entryData[DIR_ENTRY_cTime_ms] / 100) + _FAT_filetime_to_time_t (
 		u8array_to_u16 (entry->entryData, DIR_ENTRY_cTime),
 		u8array_to_u16 (entry->entryData, DIR_ENTRY_cDate)
 	);
 	st->st_blksize = partition->bytesPerSector;				// Prefered file I/O block size
-	st->st_blocks = (st->st_size + partition->bytesPerSector - 1) / partition->bytesPerSector;	// File size in blocks
+	st->st_blocks = ((st->st_size + partition->bytesPerCluster - 1) & ~((off_t)partition->bytesPerCluster - 1)) / S_BLKSIZE;	// File size in blocks
 }
