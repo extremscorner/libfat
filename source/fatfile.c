@@ -231,7 +231,7 @@ int _FAT_open_r (struct _reent *r, void *fileStruct, const char *path, int flags
 				pathEnd += 1;
 			}
 			// Create the entry data
-			strncpy (dirEntry.filename, pathEnd, NAME_MAX - 1);
+			strncpy (dirEntry.filename, pathEnd, DIR_ENTRY_NAME_MAX);
 			memset (dirEntry.entryData, 0, DIR_ENTRY_DATA_SIZE);
 
 			// Set the creation time and date

@@ -306,7 +306,7 @@ int _FAT_rename_r (struct _reent *r, const char *oldName, const char *newName) {
 	memcpy (&newDirEntry, &oldDirEntry, sizeof(DIR_ENTRY));
 
 	// Set the new name
-	strncpy (newDirEntry.filename, pathEnd, NAME_MAX - 1);
+	strncpy (newDirEntry.filename, pathEnd, DIR_ENTRY_NAME_MAX);
 
 	// Write the new entry
 	if (!_FAT_directory_addEntry (partition, &newDirEntry, dirCluster)) {
@@ -395,7 +395,7 @@ int _FAT_mkdir_r (struct _reent *r, const char *path, int mode) {
 		pathEnd += 1;
 	}
 	// Create the entry data
-	strncpy (dirEntry.filename, pathEnd, NAME_MAX - 1);
+	strncpy (dirEntry.filename, pathEnd, DIR_ENTRY_NAME_MAX);
 	memset (dirEntry.entryData, 0, DIR_ENTRY_DATA_SIZE);
 
 	// Set the creation time and date
@@ -511,7 +511,7 @@ int _FAT_statvfs_r (struct _reent *r, const char *path, struct statvfs *buf)
 	buf->f_flag = ST_NOSUID /* No support for ST_ISUID and ST_ISGID file mode bits */
 		| (partition->readOnly ? ST_RDONLY /* Read only file system */ : 0 ) ;
 	// Maximum filename length.
-	buf->f_namemax = NAME_MAX;
+	buf->f_namemax = MAX_LFN_LENGTH - 1;
 
 	_FAT_unlock(&partition->lock);
 	return 0;
@@ -607,7 +607,7 @@ int _FAT_dirnext_r (struct _reent *r, DIR_ITER *dirState, char *filename, struct
 	}
 
 	// Get the filename
-	strncpy (filename, state->currentEntry.filename, NAME_MAX);
+	strncpy (filename, state->currentEntry.filename, NAME_MAX + 1);
 	// Get the stats, if requested
 	if (filestat != NULL) {
 		_FAT_directory_entryStat (state->partition, &(state->currentEntry), filestat);

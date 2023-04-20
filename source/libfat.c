@@ -69,6 +69,10 @@ static const devoptab_t dotab_fat = {
 	_FAT_rmdir_r,
 	_FAT_stat_r,
 	NULL,	// utimes_r
+	NULL,	// fpathconf_r
+	NULL,	// pathconf_r
+	NULL,	// symlink_r
+	NULL,	// readlink_r
 };
 
 bool fatMount (const char* name, const DISC_INTERFACE* interface, sec_t startSector, uint32_t cacheSize, uint32_t SectorsPerPage) {
