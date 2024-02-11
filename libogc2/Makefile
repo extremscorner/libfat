@@ -103,15 +103,13 @@ all: $(CUBEBIN)
 dist-bin:
 	@mkdir -p include
 	@cp $(TOPDIR)/include/fat.h $(TOPDIR)/include/libfatversion.h include
-	@tar --exclude=.svn --exclude=*CVS* -cvjf $(TOPDIR)/distribute/$(VERSTRING)/libfat-ogc-$(VERSTRING).tar.bz2 include lib
+	@tar --exclude=.svn --exclude=*CVS* -cvjf $(TOPDIR)/distribute/$(VERSTRING)/libfat-ogc2-$(VERSTRING).tar.bz2 include lib
 
 install:
-	@mkdir -p $(DESTDIR)$(DEVKITPRO)/libogc2/lib/cube
-	@mkdir -p $(DESTDIR)$(DEVKITPRO)/libogc2/lib/wii
-	@mkdir -p $(DESTDIR)$(DEVKITPRO)/libogc2/include
-	@cp lib/wii/libfat.a $(DESTDIR)$(DEVKITPRO)/libogc2/lib/wii
-	@cp lib/cube/libfat.a $(DESTDIR)$(DEVKITPRO)/libogc2/lib/cube
-	@cp $(TOPDIR)/include/fat.h $(TOPDIR)/include/libfatversion.h $(DESTDIR)$(DEVKITPRO)/libogc2/include
+	@mkdir -p $(DESTDIR)$(DEVKITPRO)/libogc2
+	@cp -frv $(TOPDIR)/include $(DESTDIR)$(DEVKITPRO)/libogc2
+	@cp -frv $(CURDIR)/lib $(DESTDIR)$(DEVKITPRO)/libogc2
+	@cp -frv $(TOPDIR)/libfat_license.txt $(DESTDIR)$(DEVKITPRO)/libogc2
 
 #---------------------------------------------------------------------------------
 else

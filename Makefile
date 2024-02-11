@@ -90,7 +90,7 @@ gp2x-dist-bin: include/libfatversion.h gp2x-release distribute/$(VERSTRING)
 
 dist-src: distribute/$(VERSTRING)
 	@tar --exclude=.svn --exclude=*CVS* -cvjf distribute/$(VERSTRING)/libfat-src-$(VERSTRING).tar.bz2 \
-	source include Makefile \
+	source include Makefile libfat_license.txt \
 	nds/Makefile \
 	gba/Makefile \
 	libogc-rice/Makefile \

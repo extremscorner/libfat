@@ -126,10 +126,9 @@ dist-bin:
 	@tar --exclude=.svn --exclude=*CVS* -cvjf $(TOPDIR)/distribute/$(VERSTRING)/libfat-gp2x-$(VERSTRING).tar.bz2 include lib
 	
 install:
-	@mkdir -p $(DESTDIR)$(DEVKITPRO)/liborcus/lib
-	@mkdir -p $(DESTDIR)$(DEVKITPRO)/liborcus/include
-	@cp lib/libfat.a $(DESTDIR)$(DEVKITPRO)/liborcus/lib
-	@cp $(TOPDIR)/include/fat.h $(TOPDIR)/include/libfatversion.h $(DESTDIR)$(DEVKITPRO)/liborcus/include
+	@mkdir -p $(DESTDIR)$(DEVKITPRO)/liborcus
+	@cp -frv $(TOPDIR)/include $(DESTDIR)$(DEVKITPRO)/liborcus
+	@cp -frv $(CURDIR)/lib $(DESTDIR)$(DEVKITPRO)/liborcus
  
 #---------------------------------------------------------------------------------
 else
