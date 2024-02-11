@@ -9,8 +9,11 @@ libogc-rice/lib
 libogc-rice/wii_release
 nds/lib
 nds/release
+gp2x/lib
+gp2x/release
 distribute
 gba/include
 libogc2/include
 libogc-rice/include
 nds/include
+gp2x/include
