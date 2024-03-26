@@ -1122,6 +1122,6 @@ void _FAT_directory_entryStat (PARTITION* partition, DIR_ENTRY* entry, struct st
 		u8array_to_u16 (entry->entryData, DIR_ENTRY_cTime),
 		u8array_to_u16 (entry->entryData, DIR_ENTRY_cDate)
 	);
-	st->st_blksize = partition->bytesPerSector;				// Prefered file I/O block size
+	st->st_blksize = partition->cache->bytesPerSector * partition->cache->sectorsPerPage;				// Prefered file I/O block size
 	st->st_blocks = ((st->st_size + partition->bytesPerCluster - 1) & ~((off_t)partition->bytesPerCluster - 1)) / S_BLKSIZE;	// File size in blocks
 }
