@@ -288,6 +288,12 @@ PARTITION* _FAT_partition_constructor_buf (const DISC_INTERFACE* disc, uint32_t 
 		}
 	}
 
+	if (sectorsPerPage == 0) {
+		sectorsPerPage = partition->sectorsPerCluster;
+	}
+	if (cacheSize == 0) {
+		cacheSize = CACHE_SECTORS / sectorsPerPage;
+	}
 	// Create a cache to use
 	partition->cache = _FAT_cache_constructor (cacheSize, sectorsPerPage, partition->disc, startSector+partition->numberOfSectors, partition->bytesPerSector);
 

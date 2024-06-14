@@ -59,26 +59,21 @@
 
 // Platform specific options
 #if   defined (__wii__)
-   #define DEFAULT_CACHE_PAGES 4
-   #define DEFAULT_SECTORS_PAGE 64
+   #define CACHE_SECTORS 256
    #define USE_LWP_LOCK
    #define USE_RTC_TIME
 #elif defined (__gamecube__)
-   #define DEFAULT_CACHE_PAGES 4
-   #define DEFAULT_SECTORS_PAGE 64
+   #define CACHE_SECTORS 256
    #define USE_LWP_LOCK
    #define USE_RTC_TIME
 #elif defined (NDS)
-   #define DEFAULT_CACHE_PAGES 16
-   #define DEFAULT_SECTORS_PAGE 8
+   #define CACHE_SECTORS 128
    #define USE_RTC_TIME
 #elif defined (GBA)
-   #define DEFAULT_CACHE_PAGES 2
-   #define DEFAULT_SECTORS_PAGE 8
+   #define CACHE_SECTORS 16
    #define LIMIT_SECTORS 128
 #elif defined (GP2X)
-   #define DEFAULT_CACHE_PAGES 16
-   #define DEFAULT_SECTORS_PAGE 8
+   #define CACHE_SECTORS 128
 #endif
 
 #endif // _COMMON_H

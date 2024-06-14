@@ -121,7 +121,7 @@ bool fatMount (const char* name, const DISC_INTERFACE* interface, sec_t startSec
 }
 
 bool fatMountSimple (const char* name, const DISC_INTERFACE* interface) {
-	return fatMount (name, interface, 0, DEFAULT_CACHE_PAGES, DEFAULT_SECTORS_PAGE);
+	return fatMount (name, interface, 0, 0, 0);
 }
 
 bool fatUnmount (const char* name) {
@@ -197,7 +197,7 @@ bool fatInit (uint32_t cacheSize, bool setAsDefaultDevice) {
 		if (!disc) {
 			continue;
 		}
-		if (fatMount (_FAT_disc_interfaces[i].name, disc, 0, cacheSize, DEFAULT_SECTORS_PAGE)) {
+		if (fatMount (_FAT_disc_interfaces[i].name, disc, 0, cacheSize, 0)) {
 			// The first device to successfully mount is set as the default
 			if (defaultDevice < 0) {
 				defaultDevice = i;
@@ -242,7 +242,7 @@ bool fatInit (uint32_t cacheSize, bool setAsDefaultDevice) {
 }
 
 bool fatInitDefault (void) {
-	return fatInit (DEFAULT_CACHE_PAGES, true);
+	return fatInit (0, true);
 }
 
 void fatGetVolumeLabel (const char* name, char *label) {
