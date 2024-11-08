@@ -76,7 +76,7 @@ You can then access the filesystem using "name:/".
 This will mount the active partition or the first valid partition on the disc,
 and will use a cache size optimized for the host system.
 */
-extern bool fatMountSimple (const char* name, const DISC_INTERFACE* interface);
+extern bool fatMountSimple (const char* name, DISC_INTERFACE* interface);
 
 /*
 Mount the device pointed to by interface, and set up a devoptab entry for it as "name:".
@@ -86,7 +86,7 @@ the disc. Otherwise it will try to mount the partition starting at startSector.
 cacheSize specifies the number of pages to allocate for the cache.
 This will not startup the disc, so you need to call interface->startup(); first.
 */
-extern bool fatMount (const char* name, const DISC_INTERFACE* interface, sec_t startSector, uint32_t cacheSize, uint32_t SectorsPerPage);
+extern bool fatMount (const char* name, DISC_INTERFACE* interface, sec_t startSector, uint32_t cacheSize, uint32_t SectorsPerPage);
 
 /*
 Unmount the partition specified by name.

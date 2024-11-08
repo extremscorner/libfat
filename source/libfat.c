@@ -75,7 +75,7 @@ static const devoptab_t dotab_fat = {
 	NULL,	// readlink_r
 };
 
-bool fatMount (const char* name, const DISC_INTERFACE* interface, sec_t startSector, uint32_t cacheSize, uint32_t SectorsPerPage) {
+bool fatMount (const char* name, DISC_INTERFACE* interface, sec_t startSector, uint32_t cacheSize, uint32_t SectorsPerPage) {
 	PARTITION* partition;
 	devoptab_t* devops;
 	char* nameCopy;
@@ -83,10 +83,10 @@ bool fatMount (const char* name, const DISC_INTERFACE* interface, sec_t startSec
 	if(!name || strlen(name) > 8 || !interface)
 		return false;
 
-	if(!interface->startup())
+	if(!_FAT_disc_startup(interface))
 		return false;
 
-	if(!interface->isInserted())
+	if(!_FAT_disc_isInserted(interface))
 		return false;
 
 	char devname[10];
@@ -120,7 +120,7 @@ bool fatMount (const char* name, const DISC_INTERFACE* interface, sec_t startSec
 	return true;
 }
 
-bool fatMountSimple (const char* name, const DISC_INTERFACE* interface) {
+bool fatMountSimple (const char* name, DISC_INTERFACE* interface) {
 	return fatMount (name, interface, 0, 0, 0);
 }
 
@@ -155,7 +155,7 @@ bool fatUnmount (const char* name) {
 
 static s32 _FAT_onreset (s32 final) {
 	int i;
-	const DISC_INTERFACE *disc;
+	DISC_INTERFACE *disc;
 
 	if (final == FALSE) {
 		for (i = 0;
@@ -187,7 +187,7 @@ static sys_resetinfo _FAT_resetinfo = {
 bool fatInit (uint32_t cacheSize, bool setAsDefaultDevice) {
 	int i;
 	int defaultDevice = -1;
-	const DISC_INTERFACE *disc;
+	DISC_INTERFACE *disc;
 
 	for (i = 0;
 		_FAT_disc_interfaces[i].name != NULL && _FAT_disc_interfaces[i].getInterface != NULL;

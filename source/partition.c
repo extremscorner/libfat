@@ -111,7 +111,7 @@ static bool isValidMBR(uint8_t *sectorBuffer) {
 
 }
 
-sec_t FindFirstValidPartition_buf(const DISC_INTERFACE* disc, uint8_t *sectorBuffer)
+sec_t FindFirstValidPartition_buf(DISC_INTERFACE* disc, uint8_t *sectorBuffer)
 {
 	uint8_t part_table[16*4];
 	uint8_t *ptr;
@@ -169,7 +169,7 @@ sec_t FindFirstValidPartition_buf(const DISC_INTERFACE* disc, uint8_t *sectorBuf
 	return 0;
 }
 
-sec_t FindFirstValidPartition(const DISC_INTERFACE* disc)
+sec_t FindFirstValidPartition(DISC_INTERFACE* disc)
 {
 	uint8_t *sectorBuffer = (uint8_t*) _FAT_mem_align(MAX_SECTOR_SIZE);
 	if (!sectorBuffer) return 0;
@@ -179,7 +179,7 @@ sec_t FindFirstValidPartition(const DISC_INTERFACE* disc)
 }
 
 
-PARTITION* _FAT_partition_constructor_buf (const DISC_INTERFACE* disc, uint32_t cacheSize, uint32_t sectorsPerPage, sec_t startSector, uint8_t *sectorBuffer)
+PARTITION* _FAT_partition_constructor_buf (DISC_INTERFACE* disc, uint32_t cacheSize, uint32_t sectorsPerPage, sec_t startSector, uint8_t *sectorBuffer)
 {
 	PARTITION* partition;
 
@@ -312,7 +312,7 @@ PARTITION* _FAT_partition_constructor_buf (const DISC_INTERFACE* disc, uint32_t 
 	return partition;
 }
 
-PARTITION* _FAT_partition_constructor (const DISC_INTERFACE* disc, uint32_t cacheSize, uint32_t sectorsPerPage, sec_t startSector)
+PARTITION* _FAT_partition_constructor (DISC_INTERFACE* disc, uint32_t cacheSize, uint32_t sectorsPerPage, sec_t startSector)
 {
 	uint8_t *sectorBuffer = (uint8_t*) _FAT_mem_align(MAX_SECTOR_SIZE);
 	if (!sectorBuffer) return NULL;

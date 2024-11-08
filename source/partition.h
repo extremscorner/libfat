@@ -50,33 +50,33 @@ typedef struct {
 } FAT;
 
 typedef struct {
-	const DISC_INTERFACE* disc;
-	CACHE*                cache;
+	DISC_INTERFACE*      disc;
+	CACHE*               cache;
 	// Info about the partition
-	FS_TYPE               filesysType;
-	uint64_t              totalSize;
-	sec_t                 rootDirStart;
-	uint32_t              rootDirCluster;
-	uint32_t              numberOfSectors;
-	sec_t                 dataStart;
-	uint32_t              bytesPerSector;
-	uint32_t              sectorsPerCluster;
-	uint32_t              bytesPerCluster;
-	uint32_t              fsInfoSector;
-	FAT                   fat;
+	FS_TYPE              filesysType;
+	uint64_t             totalSize;
+	sec_t                rootDirStart;
+	uint32_t             rootDirCluster;
+	uint32_t             numberOfSectors;
+	sec_t                dataStart;
+	uint32_t             bytesPerSector;
+	uint32_t             sectorsPerCluster;
+	uint32_t             bytesPerCluster;
+	uint32_t             fsInfoSector;
+	FAT                  fat;
 	// Values that may change after construction
-	uint32_t              cwdCluster;			// Current working directory cluster
-	int                   openFileCount;
-	struct _FILE_STRUCT*  firstOpenFile;		// The start of a linked list of files
-	mutex_t               lock;					// A lock for partition operations
-	bool                  readOnly;				// If this is set, then do not try writing to the disc
-	char                  label[12];			// Volume label
+	uint32_t             cwdCluster;			// Current working directory cluster
+	int                  openFileCount;
+	struct _FILE_STRUCT* firstOpenFile;			// The start of a linked list of files
+	mutex_t              lock;					// A lock for partition operations
+	bool                 readOnly;				// If this is set, then do not try writing to the disc
+	char                 label[12];				// Volume label
 } PARTITION;
 
 /*
 Mount the supplied device and return a pointer to the struct necessary to use it
 */
-PARTITION* _FAT_partition_constructor (const DISC_INTERFACE* disc, uint32_t cacheSize, uint32_t SectorsPerPage, sec_t startSector);
+PARTITION* _FAT_partition_constructor (DISC_INTERFACE* disc, uint32_t cacheSize, uint32_t SectorsPerPage, sec_t startSector);
 
 /*
 Dismount the device and free all structures used.

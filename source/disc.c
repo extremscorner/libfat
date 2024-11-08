@@ -44,18 +44,18 @@ The list is terminated by a NULL/NULL entry.
 #include <ogc/usbstorage.h>
 #include <sdcard/gcsd.h>
 
-static const DISC_INTERFACE* get_io_wiisd (void) {
+static DISC_INTERFACE* get_io_wiisd (void) {
 	return &__io_wiisd;
 }
-static const DISC_INTERFACE* get_io_usbstorage (void) {
+static DISC_INTERFACE* get_io_usbstorage (void) {
 	return &__io_usbstorage;
 }
 
-static const DISC_INTERFACE* get_io_gcsda (void) {
+static DISC_INTERFACE* get_io_gcsda (void) {
 	return &__io_gcsda;
 }
 
-static const DISC_INTERFACE* get_io_gcsdb (void) {
+static DISC_INTERFACE* get_io_gcsdb (void) {
 	return &__io_gcsdb;
 }
 
@@ -72,19 +72,19 @@ const INTERFACE_ID _FAT_disc_interfaces[] = {
 #include <sdcard/gcsd.h>
 #include <ogc/dvd.h>
 
-static const DISC_INTERFACE* get_io_gcsda (void) {
+static DISC_INTERFACE* get_io_gcsda (void) {
 	return &__io_gcsda;
 }
 
-static const DISC_INTERFACE* get_io_gcsdb (void) {
+static DISC_INTERFACE* get_io_gcsdb (void) {
 	return &__io_gcsdb;
 }
 
-static const DISC_INTERFACE* get_io_gcsd2 (void) {
+static DISC_INTERFACE* get_io_gcsd2 (void) {
 	return &__io_gcsd2;
 }
 
-static const DISC_INTERFACE* get_io_gcode (void) {
+static DISC_INTERFACE* get_io_gcode (void) {
 	return &__io_gcode;
 }
 
