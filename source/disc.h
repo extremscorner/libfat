@@ -37,7 +37,11 @@ terminated by a {NULL,NULL} entry.
 */
 typedef struct {
 	const char* name;
+#if defined(__gamecube__) || defined (__wii__)
 	DISC_INTERFACE* (*getInterface)(void);
+#else
+	const DISC_INTERFACE* (*getInterface)(void);
+#endif
 } INTERFACE_ID;
 extern const INTERFACE_ID _FAT_disc_interfaces[];
 

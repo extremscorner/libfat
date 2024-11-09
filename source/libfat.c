@@ -166,7 +166,7 @@ static s32 _FAT_onreset (s32 final) {
 			strcpy (devname, _FAT_disc_interfaces[i].name);
 			strcat (devname, ":");
 			if (fatUnmount (devname)) {
-				disc = _FAT_disc_interfaces[i].getInterface();
+				disc = (DISC_INTERFACE*) _FAT_disc_interfaces[i].getInterface();
 				if (!disc) {
 					continue;
 				}
@@ -193,7 +193,7 @@ bool fatInit (uint32_t cacheSize, bool setAsDefaultDevice) {
 		_FAT_disc_interfaces[i].name != NULL && _FAT_disc_interfaces[i].getInterface != NULL;
 		i++)
 	{
-		disc = _FAT_disc_interfaces[i].getInterface();
+		disc = (DISC_INTERFACE*) _FAT_disc_interfaces[i].getInterface();
 		if (!disc) {
 			continue;
 		}
