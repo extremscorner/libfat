@@ -135,4 +135,15 @@ static inline uint32_t _FAT_disc_features (DISC_INTERFACE* disc) {
 	return disc->features;
 }
 
+/*
+Return a 32 bit value that specifies the sector size of the disc
+*/
+static inline uint32_t _FAT_disc_bytesPerSector (DISC_INTERFACE* disc) {
+#if defined(__gamecube__) || defined (__wii__)
+	return disc->bytesPerSector;
+#else
+	return 512;
+#endif
+}
+
 #endif // _DISC_H

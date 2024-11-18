@@ -135,7 +135,7 @@ sec_t FindFirstValidPartition_buf(DISC_INTERFACE* disc, uint8_t *sectorBuffer)
 
 		if(ptr[4]==0) continue;
 
-		if(ptr[4]==0x0F) {
+		if(ptr[4]==0x05 || ptr[4]==0x0F) {
 			sec_t part_lba2=part_lba;
 			sec_t next_lba2=0;
 			int n;
@@ -159,7 +159,6 @@ sec_t FindFirstValidPartition_buf(DISC_INTERFACE* disc, uint8_t *sectorBuffer)
 		} else {
 			if(!_FAT_disc_readSectors (disc, part_lba, 1, sectorBuffer)) return 0;
 
-
 			if (isValidMBR(sectorBuffer))
 			{
 				return part_lba;
@@ -171,7 +170,7 @@ sec_t FindFirstValidPartition_buf(DISC_INTERFACE* disc, uint8_t *sectorBuffer)
 
 sec_t FindFirstValidPartition(DISC_INTERFACE* disc)
 {
-	uint8_t *sectorBuffer = (uint8_t*) _FAT_mem_align(MAX_SECTOR_SIZE);
+	uint8_t *sectorBuffer = (uint8_t*) _FAT_mem_align(_FAT_disc_bytesPerSector(disc));
 	if (!sectorBuffer) return 0;
 	sec_t ret = FindFirstValidPartition_buf(disc, sectorBuffer);
 	_FAT_mem_free(sectorBuffer);
@@ -242,7 +241,7 @@ PARTITION* _FAT_partition_constructor_buf (DISC_INTERFACE* disc, uint32_t cacheS
 	}
 
 	partition->bytesPerSector = u8array_to_u16(sectorBuffer, BPB_bytesPerSector);
-	if(partition->bytesPerSector < MIN_SECTOR_SIZE || partition->bytesPerSector > MAX_SECTOR_SIZE) {
+	if (partition->bytesPerSector != _FAT_disc_bytesPerSector (partition->disc)) {
 		// Unsupported sector size
 		_FAT_mem_free(partition);
 		return NULL;
@@ -314,7 +313,7 @@ PARTITION* _FAT_partition_constructor_buf (DISC_INTERFACE* disc, uint32_t cacheS
 
 PARTITION* _FAT_partition_constructor (DISC_INTERFACE* disc, uint32_t cacheSize, uint32_t sectorsPerPage, sec_t startSector)
 {
-	uint8_t *sectorBuffer = (uint8_t*) _FAT_mem_align(MAX_SECTOR_SIZE);
+	uint8_t *sectorBuffer = (uint8_t*) _FAT_mem_align(_FAT_disc_bytesPerSector(disc));
 	if (!sectorBuffer) return NULL;
 	PARTITION *ret = _FAT_partition_constructor_buf(disc, cacheSize,
 			sectorsPerPage, startSector, sectorBuffer);

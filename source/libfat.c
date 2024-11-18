@@ -89,6 +89,11 @@ bool fatMount (const char* name, DISC_INTERFACE* interface, sec_t startSector, u
 	if(!_FAT_disc_isInserted(interface))
 		return false;
 
+	if (_FAT_disc_bytesPerSector (interface) < MIN_SECTOR_SIZE ||
+		_FAT_disc_bytesPerSector (interface) > MAX_SECTOR_SIZE) {
+		return false;
+	}
+
 	char devname[10];
 	strcpy(devname, name);
 	strcat(devname, ":");
