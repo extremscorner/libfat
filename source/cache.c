@@ -219,7 +219,7 @@ bool _FAT_cache_readSectors(CACHE *cache,sec_t sector,sec_t numSectors,void *buf
 
 	while(numSectors>0) {
 #if defined(__gamecube__) || defined (__wii__)
-		if(SYS_IsDMAAddress(dest) && (sector%cache->sectorsPerPage)==0) {
+		if(SYS_IsDMAAddress(dest,32) && (sector%cache->sectorsPerPage)==0) {
 #else
 		if((sector%cache->sectorsPerPage)==0) {
 #endif
@@ -355,7 +355,7 @@ bool _FAT_cache_writeSectors (CACHE* cache, sec_t sector, sec_t numSectors, cons
 
 	while(numSectors>0) {
 #if defined(__gamecube__) || defined (__wii__)
-		if(SYS_IsDMAAddress(src) && (sector%cache->sectorsPerPage)==0) {
+		if(SYS_IsDMAAddress(src,32) && (sector%cache->sectorsPerPage)==0) {
 #else
 		if((sector%cache->sectorsPerPage)==0) {
 #endif
