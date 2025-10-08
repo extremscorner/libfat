@@ -2,7 +2,7 @@
 .SUFFIXES:
 #---------------------------------------------------------------------------------
 ifeq ($(strip $(DEVKITRICE)),)
-$(error "Please set DEVKITRICE in your environment. export DEVKITRICE=<path to>devkitRice)
+$(error "Please set DEVKITRICE in your environment. export DEVKITRICE=<path to>devkitRice")
 endif
 
 include	$(DEVKITRICE)/rules
@@ -116,7 +116,7 @@ $(CUBEBIN)	:	$(OFILES) $(LIBDIR)/$(PLATFORM)
 	@echo built ... $(notdir $@)
 
 $(LIBDIR)/$(PLATFORM):
-	mkdir  -p $(LIBDIR)/$(PLATFORM)
+	@mkdir -p $(LIBDIR)/$(PLATFORM)
 
 -include $(DEPENDS)
 

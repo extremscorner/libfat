@@ -2,14 +2,14 @@
 .SUFFIXES:
 #---------------------------------------------------------------------------------
 ifeq ($(strip $(DEVKITPPC)),)
-$(error "Please set DEVKITPPC in your environment. export DEVKITPPC=<path to>devkitPPC)
+$(error "Please set DEVKITPPC in your environment. export DEVKITPPC=<path to>devkitPPC")
 endif
 
 ifeq ($(PLATFORM),wii)
 include $(DEVKITPRO)/libogc2/wii_rules
 endif
 
-ifeq ($(PLATFORM),cube)
+ifeq ($(PLATFORM),gamecube)
 include $(DEVKITPRO)/libogc2/gamecube_rules
 endif
 
@@ -18,27 +18,27 @@ endif
 # SOURCES is a list of directories containing source code
 # INCLUDES is a list of directories containing extra header files
 # DATA is a list of directories containing binary files
-# LIBDIR is where the built library will be placed
+# LIB is where the built library will be placed
 # all directories are relative to this makefile
 #---------------------------------------------------------------------------------
 BUILD		?=	wii_release
 SOURCES		:=	../source
 INCLUDES	:=	../include
 DATA		:=
-LIBDIR		:=	$(TOPDIR)/libogc2/lib
+LIB			:=	$(TOPDIR)/libogc2/$(PLATFORM)/lib
 
 #---------------------------------------------------------------------------------
 # options for code generation
 #---------------------------------------------------------------------------------
-CFLAGS	= -g -Os -Wall $(MACHDEP) $(INCLUDE)
+CFLAGS	= -g -O2 -Wall $(MACHDEP) $(INCLUDE)
 CXXFLAGS	=	$(CFLAGS)
 
 ASFLAGS	:=	-g
 
 ifneq ($(BUILD),debug)
-export CUBEBIN	:=	$(LIBDIR)/$(PLATFORM)/libfat.a
+export CUBEBIN	:=	$(LIB)/libfat.a
 else
-export CUBEBIN	:=	$(LIBDIR)/$(PLATFORM)/libfatd.a
+export CUBEBIN	:=	$(LIB)/libfatd.a
 CFLAGS	+=	-DFAT_DEBUG
 endif
 
@@ -84,7 +84,7 @@ export INCLUDE	:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
 			-I$(LIBOGC_INC)
 
 export LIBPATHS	:=	$(foreach dir,$(LIBDIRS),-L$(dir)/lib) \
-										-L$(LIBOGC_LIB)
+			-L$(LIBOGC_LIB)
 
 .PHONY: $(BUILD) clean
 
@@ -96,20 +96,20 @@ $(BUILD):
 #---------------------------------------------------------------------------------
 clean:
 	@echo clean ...
-	@rm -fr wii_debug wii_release cube_debug cube_release $(LIBDIR) include
+	@rm -fr wii wii_debug wii_release gamecube gamecube_debug gamecube_release
 
 all: $(CUBEBIN)
 
 dist-bin:
-	@mkdir -p include
-	@cp $(TOPDIR)/include/fat.h $(TOPDIR)/include/libfatversion.h include
-	@tar --exclude=.svn --exclude=*CVS* -cvjf $(TOPDIR)/distribute/$(VERSTRING)/libfat-ogc2-$(VERSTRING).tar.bz2 include lib
+	@tar --exclude=.svn --exclude=*CVS* -cvjf $(TOPDIR)/distribute/$(VERSTRING)/libfat-ogc2-$(VERSTRING).tar.bz2 gamecube wii
 
 install:
 	@mkdir -p $(DESTDIR)$(DEVKITPRO)/libogc2
-	@cp -frv $(TOPDIR)/include $(DESTDIR)$(DEVKITPRO)/libogc2
-	@cp -frv $(CURDIR)/lib $(DESTDIR)$(DEVKITPRO)/libogc2
+	@cp -frv $(TOPDIR)/include $(CURDIR)/gamecube
+	@cp -frv $(TOPDIR)/include $(CURDIR)/wii
 	@cp -frv $(TOPDIR)/libfat_license.txt $(DESTDIR)$(DEVKITPRO)/libogc2
+	@cp -frv $(CURDIR)/gamecube $(DESTDIR)$(DEVKITPRO)/libogc2
+	@cp -frv $(CURDIR)/wii $(DESTDIR)$(DEVKITPRO)/libogc2
 
 #---------------------------------------------------------------------------------
 else
@@ -119,13 +119,13 @@ DEPENDS	:=	$(OFILES:.o=.d)
 #---------------------------------------------------------------------------------
 # main targets
 #---------------------------------------------------------------------------------
-$(CUBEBIN)	:	$(OFILES) $(LIBDIR)/$(PLATFORM)
+$(CUBEBIN)	:	$(OFILES) $(LIB)
 	@rm -f "$(CUBEBIN)"
 	@$(AR) rcs "$(CUBEBIN)" $(OFILES)
 	@echo built ... $(notdir $@)
 
-$(LIBDIR)/$(PLATFORM):
-	mkdir  -p $(LIBDIR)/$(PLATFORM)
+$(LIB):
+	@mkdir -p $(LIB)
 
 -include $(DEPENDS)
 
