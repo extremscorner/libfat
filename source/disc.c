@@ -47,16 +47,9 @@ The list is terminated by a NULL/NULL entry.
 static DISC_INTERFACE* get_io_wiisd (void) {
 	return &__io_wiisd;
 }
+
 static DISC_INTERFACE* get_io_usbstorage (void) {
 	return &__io_usbstorage;
-}
-
-static DISC_INTERFACE* get_io_gcsda (void) {
-	return &__io_gcsda;
-}
-
-static DISC_INTERFACE* get_io_gcsdb (void) {
-	return &__io_gcsdb;
 }
 
 const INTERFACE_ID _FAT_disc_interfaces[] = {
@@ -66,23 +59,11 @@ const INTERFACE_ID _FAT_disc_interfaces[] = {
 	{"cardb", get_io_gcsdb},
 	{NULL, NULL}
 };	
-	
-/* ==================== Gamecube ==================== */
+
+/* ==================== GameCube ==================== */
 #elif defined (__gamecube__)
 #include <sdcard/gcsd.h>
 #include <ogc/dvd.h>
-
-static DISC_INTERFACE* get_io_gcsda (void) {
-	return &__io_gcsda;
-}
-
-static DISC_INTERFACE* get_io_gcsdb (void) {
-	return &__io_gcsdb;
-}
-
-static DISC_INTERFACE* get_io_gcsd2 (void) {
-	return &__io_gcsd2;
-}
 
 static DISC_INTERFACE* get_io_gcode (void) {
 	return &__io_gcode;
