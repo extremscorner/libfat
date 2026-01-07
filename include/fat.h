@@ -95,6 +95,11 @@ If there are open files, it will attempt to synchronise them to disc.
 extern bool fatUnmount (const char* name);
 
 /*
+Deinitialise any inserted block-devices.
+*/
+extern void fatDeinit (void);
+
+/*
 Get Volume Label
 */
 extern void fatGetVolumeLabel (const char* name, char *label);

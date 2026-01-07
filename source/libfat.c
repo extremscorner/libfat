@@ -159,28 +159,11 @@ bool fatUnmount (const char* name) {
 #if defined(__gamecube__) || defined (__wii__)
 
 static s32 _FAT_onreset (s32 final) {
-	int i;
-	DISC_INTERFACE *disc;
-
-	if (final == FALSE) {
-		for (i = 0;
-			_FAT_disc_interfaces[i].name != NULL && _FAT_disc_interfaces[i].getInterface != NULL;
-			i++)
-		{
-			char devname[10];
-			strcpy (devname, _FAT_disc_interfaces[i].name);
-			strcat (devname, ":");
-			if (fatUnmount (devname)) {
-				disc = (DISC_INTERFACE*) _FAT_disc_interfaces[i].getInterface();
-				if (!disc) {
-					continue;
-				}
-				_FAT_disc_shutdown (disc);
-			}
-		}
+	if (!final) {
+		fatDeinit();
 	}
 
-	return TRUE;
+	return true;
 }
 
 static sys_resetinfo _FAT_resetinfo = {
@@ -248,6 +231,31 @@ bool fatInit (uint32_t cacheSize, bool setAsDefaultDevice) {
 
 bool fatInitDefault (void) {
 	return fatInit (0, true);
+}
+
+void fatDeinit (void) {
+	int i;
+	DISC_INTERFACE *disc;
+
+	for (i = 0;
+		_FAT_disc_interfaces[i].name != NULL && _FAT_disc_interfaces[i].getInterface != NULL;
+		i++)
+	{
+		char devname[10];
+		strcpy (devname, _FAT_disc_interfaces[i].name);
+		strcat (devname, ":");
+		if (fatUnmount (devname)) {
+			disc = (DISC_INTERFACE*) _FAT_disc_interfaces[i].getInterface();
+			if (!disc) {
+				continue;
+			}
+			_FAT_disc_shutdown (disc);
+		}
+	}
+
+#if defined(__gamecube__) || defined (__wii__)
+	SYS_UnregisterResetFunc(&_FAT_resetinfo);
+#endif
 }
 
 void fatGetVolumeLabel (const char* name, char *label) {
