@@ -258,14 +258,14 @@ void fatDeinit (void) {
 #endif
 }
 
-void fatGetVolumeLabel (const char* name, char *label) {
+bool fatGetVolumeLabel (const char* name, char *label) {
 	devoptab_t *devops;
 	PARTITION* partition;
 	char *buf;
 	int namelen,i;
 
 	if(!name || !label)
-		return;
+		return false;
 
 	namelen = strlen(name);
 	buf=(char*)_FAT_mem_allocate(sizeof(char)*namelen+2);	
@@ -286,15 +286,15 @@ void fatGetVolumeLabel (const char* name, char *label) {
 	for(i=0;buf[i]!='\0' && buf[i]!=':';i++);  
 	if (!devops || strncasecmp(buf,devops->name,i)) {
 		_FAT_mem_free(buf);
-		return;
+		return false;
 	}
 
 	_FAT_mem_free(buf);
 
 	// Perform a quick check to make sure we're dealing with a libfat controlled device
 	if (devops->open_r != dotab_fat.open_r) {
-		return;
-	}	
+		return false;
+	}
 
 	partition = (PARTITION*)devops->deviceData;
 
@@ -303,4 +303,6 @@ void fatGetVolumeLabel (const char* name, char *label) {
 		label[11]='\0';
 	}
 	if(!strncmp(label, "NO NAME", 7)) label[0]='\0';
+
+	return true;
 }

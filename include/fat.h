@@ -102,7 +102,7 @@ extern void fatDeinit (void);
 /*
 Get Volume Label
 */
-extern void fatGetVolumeLabel (const char* name, char *label);
+extern bool fatGetVolumeLabel (const char* name, char *label);
 
 // File attributes
 #define ATTR_ARCHIVE	0x20			// Archive
