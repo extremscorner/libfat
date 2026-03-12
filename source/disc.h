@@ -88,13 +88,13 @@ static inline bool _FAT_disc_writeSectors (DISC_INTERFACE* disc, sec_t sector, s
 }
 
 /*
-Reset the card back to a ready state
+Write any dirty sectors back to disc and clear out the contents of the cache
 */
-static inline bool _FAT_disc_clearStatus (DISC_INTERFACE* disc) {
+static inline bool _FAT_disc_flush (DISC_INTERFACE* disc) {
 #if defined(__gamecube__) || defined (__wii__)
-	return disc->clearStatus(disc);
+	return disc->flush(disc);
 #else
-	return disc->clearStatus();
+	return true;
 #endif
 }
 

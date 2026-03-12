@@ -419,7 +419,7 @@ bool _FAT_cache_flush (CACHE* cache) {
 		}
 	}
 
-	return true;
+	return _FAT_disc_flush(cache->disc);
 }
 
 void _FAT_cache_invalidate (CACHE* cache) {
