@@ -158,6 +158,8 @@ bool fatUnmount (const char* name) {
 
 #if defined(__gamecube__) || defined (__wii__)
 
+const char __attribute__ ((weak)) __sys_versioninfo[] = _V_STRING "\n" _LIBFAT_STRING;
+
 static s32 _FAT_onreset (s32 final) {
 	if (!final) {
 		fatDeinit();

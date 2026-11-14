@@ -44,6 +44,7 @@
 #if defined(__gamecube__) || defined (__wii__)
    #include <gctypes.h>
    #include <ogc/disc_io.h>
+   #include <ogc/libversion.h>
    #include <gccore.h>
 #elif defined(NDS)
    #include <nds/ndstypes.h>
